@@ -40,6 +40,8 @@
 
 Spec-Driven Development **flips the script** on traditional software development. For decades, code has been king — specifications were just scaffolding we built and discarded once the "real work" of coding began. Spec-Driven Development changes this: **specifications become executable**, directly generating working implementations rather than just guiding them.
 
+> **Building AI agents?** This fork (`agents-spec-kit`) extends the kit with a spec-driven workflow for Claude Code skills and subagents: `/speckit.agent.specify` → `/speckit.agent.plan` → `/speckit.agent.scaffold` → `/speckit.agent.eval`. See the [Agent-building extension](./AGENTS.md#agent-building-extension-agents-spec-kit) section in `AGENTS.md` and the research docs under [`research/`](./research/).
+
 ## ⚡ Get Started
 
 ### 1. Install Specify CLI

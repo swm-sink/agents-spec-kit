@@ -10,6 +10,61 @@ The toolkit supports multiple AI coding assistants, allowing teams to use their 
 
 ---
 
+## Agent-building extension (agents-spec-kit)
+
+This fork extends Spec Kit with a **spec-driven workflow for building AI agents** — specifically Claude Code skills and subagents. Use it when the feature you're building IS an agent (a bundle of `.claude/skills/` and `.claude/agents/` files), not ordinary application code.
+
+### Workflow
+
+```
+/speckit.agent.specify  "An agent that triages incoming GitHub issues..."
+        ↓
+specs/NNN-issue-triage/agent-spec.md   (capabilities, triggering, eval scenarios)
+        ↓
+/speckit.agent.plan
+        ↓
+agent-plan.md   (skill/subagent inventory, tool decisions)
+        ↓
+/speckit.agent.scaffold
+        ↓
+.claude/skills/<name>/SKILL.md
+.claude/agents/<name>.md   (real files written via the bundled author subagents)
+        ↓
+/speckit.agent.eval
+        ↓
+eval-spec.md   (Inspect-AI-shaped, runtime-agnostic)
+```
+
+### What ships
+
+| Path | Purpose |
+|---|---|
+| `research/repo-survey.md` | 50-repo ecosystem survey (frameworks, MCP, evals, patterns) |
+| `research/claude-code-skills-reference.md` | Reverse-engineered skill format reference |
+| `research/claude-code-subagents-reference.md` | Reverse-engineered subagent format reference |
+| `research/design.md` | v1 design that produced everything below |
+| `templates/commands/agent.{specify,plan,scaffold,eval}.md` | Four new slash commands |
+| `templates/agent-spec-template.md` | Spec template for agent features |
+| `templates/agent-plan-template.md` | Plan template for agent features |
+| `templates/skill-template/` | Folder template for new skills |
+| `templates/subagent-template.md` | Single-file template for new subagents |
+| `.claude/skills/` (5 skills) | Self-hosting starter library: `scaffold-skill`, `scaffold-subagent`, `validate-agent-bundle`, `write-skill-description`, `design-eval-spec` |
+| `.claude/agents/` (5 subagents) | Self-hosting starter library: `agent-architect`, `skill-author`, `subagent-author`, `agent-reviewer`, `agent-eval-designer` |
+
+### Format conservatism
+
+The skill and subagent files in this repo only use frontmatter fields documented in the research references:
+- **Skills**: `name`, `description`, `allowed-tools`.
+- **Subagents**: `name`, `description`, `tools`, `model`.
+
+Fields the research marked `[observed, undocumented]` (e.g., `effort`, `permissionMode`, `paths`, `arguments`, `context: fork`) are **not** used by the bundled examples. Slash commands instruct agents to gate them behind explicit user requests with a Complexity Tracking entry.
+
+### Self-hosting
+
+The kit builds itself: the `scaffold-skill` skill produces SKILL.md files conformant to `templates/skill-template/`, and the `validate-agent-bundle` skill is what we'd use to lint new files. If they break, the kit notices first.
+
+---
+
 ## General practices
 
 - Any changes to `__init__.py` for the Specify CLI require a version rev in `pyproject.toml` and addition of entries to `CHANGELOG.md`.
